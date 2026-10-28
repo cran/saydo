@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting started with saydo</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting started with saydo</h1>
+
+
+
+<p>saydo links what people <em>say</em> to what they <em>do</em>. It
+applies a qualitative codebook to text with a large language model,
+checks the coding against a human coder, and then tests whether each
+theme goes with a difference in a quantitative metric.</p>
+<p>This article walks through the whole workflow on simulated data.
+Every step runs offline with <code>mock_coder()</code>, a keyword-based
+stand-in for the LLM, so no API key is needed. The step that calls a
+real model is shown but not run.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(saydo)</span></code></pre></div>
+<div id="the-data" class="section level2">
+<h2>The data</h2>
+<p><code>mock_mixed_data()</code> simulates users from three hidden
+profiles. Frustrated users have long sessions and many errors, efficient
+users have short clean sessions, and casual users sit in between. Each
+user leaves a line of feedback whose wording depends on their profile.
+Feature requests are added at random, so they should show no real
+effect.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>users <span class="ot">&lt;-</span> <span class="fu">mock_mixed_data</span>(<span class="at">n_users =</span> <span class="dv">150</span>, <span class="at">seed =</span> <span class="dv">2026</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>users</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 150 × 5</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;    user_id  profile    session_duration_sec errors_encountered</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;                     &lt;dbl&gt;              &lt;int&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;  1 USR-1001 frustrated                  455                  8</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;  2 USR-1002 frustrated                  481                  6</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;  3 USR-1003 frustrated                  437                 11</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;  4 USR-1004 efficient                   119                  0</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;  5 USR-1005 frustrated                  389                  3</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;  6 USR-1006 casual                      311                  5</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt;  7 USR-1007 casual                      252                  2</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt;  8 USR-1008 frustrated                  521                  6</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt;  9 USR-1009 casual                      234                  0</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; 10 USR-1010 efficient                   172                  0</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;    transcript_feedback                                                          </span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt;  1 I got completely lost trying to save my profile. The button vanished.        </span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt;  2 I got completely lost trying to save my profile. The button vanished.        </span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt;  3 The layout changed and now I can&#39;t find where my dashboard went. It would be…</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt;  4 Extremely efficient workflow. Saved me a ton of time today. Please add an op…</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt;  5 This interface is incredibly frustrating. It took me three tries to upload.  </span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt;  6 The application loaded normally and I viewed my recent activity history. It …</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt;  7 Standard performance. Nothing spectacular but it gets the job done.          </span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt;  8 This interface is incredibly frustrating. It took me three tries to upload. …</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt;  9 The application loaded normally and I viewed my recent activity history.     </span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; 10 The feature works exactly as expected. Seamless export process.              </span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; # ℹ 140 more rows</span></span></code></pre></div>
+<p>The <code>profile</code> column is the ground truth. Real data would
+not have it; here it lets us check that the workflow recovers what was
+built in.</p>
+</div>
+<div id="step-1-write-a-codebook" class="section level2">
+<h2>Step 1: write a codebook</h2>
+<p>A codebook maps each code name to a definition. The definitions are
+what the LLM sees, so make them specific: what counts, and what does
+not. Code names become column names, so they must be syntactic R
+names.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>codebook <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">UI_Confusion        =</span> <span class="st">&quot;The user reports being lost, confused, or unable to find something in the interface&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">Positive_Experience =</span> <span class="st">&quot;The user expresses satisfaction, praise, or enjoyment of the product&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">Feature_Request     =</span> <span class="st">&quot;The user asks for a feature or capability that does not currently exist&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="step-2-code-the-text" class="section level2">
+<h2>Step 2: code the text</h2>
+<p>With a real LLM, pass any <a href="https://ellmer.tidyverse.org">ellmer</a> chat object. Pin the
+exact model so the coding can be reproduced:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>coded <span class="ot">&lt;-</span> <span class="fu">llm_auto_code</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  users, user_id, transcript_feedback, codebook,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">chat =</span> ellmer<span class="sc">::</span><span class="fu">chat_openai</span>(<span class="at">model =</span> <span class="st">&quot;gpt-4.1-mini&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>)</span></code></pre></div>
+<p>Each text is coded in its own conversation, so earlier texts cannot
+influence later ones. The first text is sent on its own: if the API key,
+account credit or model name is wrong, you get an error within seconds
+rather than a stalled batch. The remaining texts are sent in parallel
+(<code>max_active</code> at a time). Empty or missing texts are not sent
+and get <code>NA</code>.</p>
+<p>Here we use the offline coder instead:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>coded <span class="ot">&lt;-</span> <span class="fu">llm_auto_code</span>(users, user_id, transcript_feedback, codebook,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                       <span class="at">coder =</span> <span class="fu">mock_coder</span>())</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>coded[, <span class="fu">c</span>(<span class="st">&quot;user_id&quot;</span>, <span class="fu">names</span>(codebook))]</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 150 × 4</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;    user_id  UI_Confusion Positive_Experience Feature_Request</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;lgl&gt;        &lt;lgl&gt;               &lt;lgl&gt;          </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;  1 USR-1001 TRUE         FALSE               FALSE          </span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt;  2 USR-1002 TRUE         FALSE               FALSE          </span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;  3 USR-1003 TRUE         FALSE               TRUE           </span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;  4 USR-1004 FALSE        TRUE                TRUE           </span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;  5 USR-1005 TRUE         FALSE               FALSE          </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt;  6 USR-1006 FALSE        FALSE               TRUE           </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;  7 USR-1007 FALSE        FALSE               FALSE          </span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;  8 USR-1008 TRUE         FALSE               TRUE           </span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;  9 USR-1009 FALSE        FALSE               FALSE          </span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; 10 USR-1010 FALSE        TRUE                FALSE          </span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; # ℹ 140 more rows</span></span></code></pre></div>
+</div>
+<div id="step-3-check-the-coding-against-a-human" class="section level2">
+<h2>Step 3: check the coding against a human</h2>
+<p>Before trusting automated codes, have a person code a random sample
+blind and compare. To illustrate, we simulate a human coder who follows
+the hidden profiles but makes occasional mistakes:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>sample_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(users), <span class="dv">50</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>flip <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">rate =</span> <span class="fl">0.08</span>) <span class="fu">xor</span>(x, <span class="fu">runif</span>(<span class="fu">length</span>(x)) <span class="sc">&lt;</span> rate)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>human <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">user_id =</span> users<span class="sc">$</span>user_id[sample_rows],</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">UI_Confusion =</span> <span class="fu">flip</span>(users<span class="sc">$</span>profile[sample_rows] <span class="sc">==</span> <span class="st">&quot;frustrated&quot;</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">Positive_Experience =</span> <span class="fu">flip</span>(users<span class="sc">$</span>profile[sample_rows] <span class="sc">==</span> <span class="st">&quot;efficient&quot;</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="at">Feature_Request =</span> <span class="fu">flip</span>(<span class="fu">grepl</span>(<span class="st">&quot;wish|please add|would be great&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>                               users<span class="sc">$</span>transcript_feedback[sample_rows]))</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="fu">code_agreement</span>(coded, human)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 11</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;   theme                   n prevalence_llm prevalence_human agreement kappa</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;               &lt;int&gt;          &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; 1 UI_Confusion           50           0.46             0.5       0.96 0.92 </span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 2 Positive_Experience    50           0.28             0.36      0.92 0.818</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 3 Feature_Request        50           0.34             0.24      0.9  0.760</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;   kappa_low kappa_high precision recall    f1</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;       &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 1     0.811      1         1      0.92  0.958</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 2     0.646      0.989     1      0.778 0.875</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; 3     0.561      0.960     0.706  1     0.828</span></span></code></pre></div>
+<p>How to read it:</p>
+<ul>
+<li><strong>kappa</strong> corrects raw agreement for chance. As a rough
+guide, above 0.6 is substantial and above 0.8 near-perfect.</li>
+<li><strong>precision</strong> is the share of the LLM’s “present” codes
+that the human agrees with. Low precision means the LLM over-applies the
+code.</li>
+<li><strong>recall</strong> is the share of the human’s “present” codes
+that the LLM also found. Low recall means the LLM misses the theme.</li>
+</ul>
+<p>If a code scores poorly, sharpen its definition and re-code. Report
+these figures alongside your analysis.</p>
+</div>
+<div id="step-4-link-themes-to-the-metrics" class="section level2">
+<h2>Step 4: link themes to the metrics</h2>
+<p><code>cross_tab_themes()</code> compares the metric between units
+with and without each theme, using Welch’s t-test, and adjusts the
+p-values for the number of themes tested (Benjamini–Hochberg by
+default).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">cross_tab_themes</span>(coded, session_duration_sec)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>results</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 12</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   theme               n_absent n_present mean_absent mean_present difference</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                  &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 1 UI_Confusion              83        67        199.         441.      242. </span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 2 Positive_Experience      106        44        374.         146.     -228. </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 3 Feature_Request          108        42        301.         323.       21.7</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;   conf_low conf_high cohens_d  p_value p_adjusted significant</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt; &lt;lgl&gt;      </span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 1    222.      263.     3.77  4.74e-50   1.42e-49 TRUE       </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 2   -249.     -207.    -2.56  1.21e-43   1.82e-43 TRUE       </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; 3    -27.6      70.9    0.158 3.84e- 1   3.84e- 1 FALSE</span></span></code></pre></div>
+<p>The codebook and ID column are remembered from
+<code>llm_auto_code()</code>, so you only name the metric. Run it again
+for other metrics:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">cross_tab_themes</span>(coded, errors_encountered)[, <span class="fu">c</span>(<span class="st">&quot;theme&quot;</span>, <span class="st">&quot;difference&quot;</span>, <span class="st">&quot;p_adjusted&quot;</span>, <span class="st">&quot;significant&quot;</span>)]</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 4</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   theme               difference p_adjusted significant</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                    &lt;dbl&gt;      &lt;dbl&gt; &lt;lgl&gt;      </span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 1 UI_Confusion             6.24    5.14e-33 TRUE       </span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 2 Positive_Experience     -5.53    1.58e-32 TRUE       </span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 3 Feature_Request          0.209   7.51e- 1 FALSE</span></span></code></pre></div>
+<p>These are associations, not causal effects. Confused users have
+longer sessions, but the comparison does not adjust for anything else.
+For that, fit your own model on <code>coded</code>.</p>
+</div>
+<div id="step-5-plot" class="section level2">
+<h2>Step 5: plot</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">plot_theme_impact</span>(results)</span></code></pre></div>
+<p><img role="img" aria-label="Dot plot of the mean difference in session duration per theme, with confidence intervals." src="data:image/png;base64,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" alt="Dot plot of the mean difference in session duration per theme, with confidence intervals." /></p>
+</div>
+<div id="segment-level-transcripts" class="section level2">
+<h2>Segment-level transcripts</h2>
+<p>Interviews are often coded by segment, with many rows per
+participant, while the metrics have one row per participant. Code the
+segments as they are, then pass the participant table as
+<code>metrics</code>. A theme counts as present for a participant if it
+appears in any of their segments:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>segments <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">participant =</span> <span class="fu">c</span>(<span class="st">&quot;P1&quot;</span>, <span class="st">&quot;P1&quot;</span>, <span class="st">&quot;P2&quot;</span>, <span class="st">&quot;P2&quot;</span>, <span class="st">&quot;P3&quot;</span>, <span class="st">&quot;P4&quot;</span>, <span class="st">&quot;P4&quot;</span>, <span class="st">&quot;P5&quot;</span>, <span class="st">&quot;P6&quot;</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">segment_id  =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">text =</span> <span class="fu">c</span>(<span class="st">&quot;It was fine at first.&quot;</span>, <span class="st">&quot;Then I got completely lost.&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>           <span class="st">&quot;Everything was clean and fast.&quot;</span>, <span class="st">&quot;I love the export.&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>           <span class="st">&quot;So confusing, I could not find the settings.&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>           <span class="st">&quot;Normal day.&quot;</span>, <span class="st">&quot;Nothing to report.&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>           <span class="st">&quot;I got lost twice.&quot;</span>, <span class="st">&quot;It works.&quot;</span>),</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>logs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">participant =</span> <span class="fu">paste0</span>(<span class="st">&quot;P&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>                   <span class="at">minutes_active =</span> <span class="fu">c</span>(<span class="dv">42</span>, <span class="dv">12</span>, <span class="dv">39</span>, <span class="dv">15</span>, <span class="dv">45</span>, <span class="dv">14</span>))</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>coded_segments <span class="ot">&lt;-</span> <span class="fu">llm_auto_code</span>(segments, participant, text,</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>                                <span class="fu">c</span>(<span class="st">&quot;UI_Confusion&quot;</span>, <span class="st">&quot;Positive_Experience&quot;</span>),</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>                                <span class="at">coder =</span> <span class="fu">mock_coder</span>())</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="fu">cross_tab_themes</span>(coded_segments, minutes_active, <span class="at">metrics =</span> logs)</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 12</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt;   theme               n_absent n_present mean_absent mean_present difference</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                  &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; 1 UI_Confusion               3         3        13.7           42       28.3</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; 2 Positive_Experience        5         1        31             12       NA  </span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt;   conf_low conf_high cohens_d   p_value p_adjusted significant</span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;lgl&gt;      </span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt; 1     22.1      34.6     11.9  0.000736   0.000736 TRUE       </span></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt; 2     NA        NA       NA   NA         NA        FALSE</span></span></code></pre></div>
+<p>To check agreement at segment level, give each segment its own ID and
+pass it as <code>id_col</code>,
+e.g. <code>code_agreement(coded_segments, human, id_col = &quot;segment_id&quot;)</code>.</p>
+</div>
+<div id="data-protection" class="section level2">
+<h2>Data protection</h2>
+<p>With a hosted LLM, every text is sent to the provider. Check that
+this is allowed under your ethics approval and data agreements before
+coding real participant data, or run a local model with
+<code>ellmer::chat_ollama()</code>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
